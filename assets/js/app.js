@@ -19,15 +19,15 @@ console.log("Check app.js");
     // var svgHeight = window.innerHeight;
 
     var svgWidth = 700;
-    var svgHeight = 500;
+    var svgHeight = 600;
 
     console.log(svgWidth);
   
     var margin = {
       top: 50,
-      bottom: 50,
+      bottom: 100,
       right: 50,
-      left: 50
+      left: 100
     };
   
     var height = svgHeight - margin.top - margin.bottom;
@@ -48,7 +48,7 @@ console.log("Check app.js");
     d3.csv("assets/data/data.csv")
       .then(function(healthData) {
 
-        console.log(healthData);
+        // console.log(healthData);
   
         // create date parser
         // var dateParser = d3.timeParse("%d-%b");
@@ -62,16 +62,16 @@ console.log("Check app.js");
   
         // create scales
         var xLinearScale = d3.scaleLinear()
-          .domain(d3.extent(healthData, d => d.poverty))
-          // .domain([0, d3.max(healthData, d => d.poverty)])
+          // .domain(d3.extent(healthData, d => d.poverty))
+          .domain([d3.min(healthData, d => d.poverty)*0.9, d3.max(healthData, d => d.poverty)])
           .range([0, width]);
   
         var yLinearScale = d3.scaleLinear()
-          .domain([0, d3.max(healthData, d => d.healthcare)])
+          .domain([d3.min(healthData, d => d.healthcare)*0.9, d3.max(healthData, d => d.healthcare)])
           .range([height, 0]);
   
         // create axes
-        var xAxis = d3.axisBottom(xLinearScale);
+        var xAxis = d3.axisBottom(xLinearScale).ticks(6);
         var yAxis = d3.axisLeft(yLinearScale);
   
         // append axes
@@ -97,14 +97,15 @@ console.log("Check app.js");
           .attr("stroke", "grey");
         
         // console.log(healthData);
-        healthData.forEach(function(data){
-          console.log(data.poverty);
-          console.log(data.healthcare);
-          console.log(data.abbr);
-        });
+        // healthData.forEach(function(data){
+        //   console.log(data.poverty);
+        //   console.log(data.healthcare);
+        //   console.log(data.abbr);
+        // });
 
         //append text on circles
-        var textGroup = chartGroup.selectAll("text")
+        // var textGroup = chartGroup.selectAll("text")
+        var textGroup = circlesGroup.select("text")
           .data(healthData)
           .enter()
           .append("text")
@@ -115,24 +116,29 @@ console.log("Check app.js");
           .style("font-size", "7px") 
           .text(function(d) { return d.abbr; });
 
+        // Append axes titles
+        var ylabelGroup = chartGroup.append("text")
+          .attr("transform", "rotate(-90)")
+          .attr("y", 0 - margin.left + 40)
+          .attr("x", 0 - (height / 2))
+          //The dy attribute indicates a shift along the y-axis on the position of an element or its content.
+          .attr("dy", "1em") 
+          .attr("class", "axisText")
+          .text("Lacks Healthcare (%)");
 
-        //append circles (alt)
-        // var g = chartGroup.selectALL(null)
-        //   .data(healthData)
-        //   .enter()
-        //   .append("g")
-        //   .attr("transform", `translate(${xLinearScale(d.poverty)}, ${yLinearScale(d.healthcare)})`);        
+        var xlabelGroup = chartGroup.append("text")
+          .attr("transform", `translate(${width / 2}, ${height + margin.top - 15})`)
+          .attr("dy", "1em")
+          .attr("class", "axisText")
+          .text("In Poverty (%)");
+
+        //Debug
+        // console.log(ylabelGroup.selectAll('text'));
         
-        // g.append("circle")
-        //   .attr("r", "5")
-        //   .attr("fill","blue")       
-        //   .attr("stroke-width", "1")
-        //   .attr("stroke", "grey");        
-        
-        // g.append("text")
-        //   .text(function(d) { return d.abbr; });
+        // var dummy = ylabelGroup.selectAll('text').attr('value');
 
-
+        // console.log(dummy);
+       
               
         
         // // Date formatter to display dates nicely

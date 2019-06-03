@@ -29,3 +29,15 @@ body {
   margin: 0;
   font-size: 16px;
 }
+
+/* .poverty-text {
+  font-weight: bold;
+} */
+
+.axisText {
+  font-family: sans-serif;
+  font-size: 14px;
+  font-weight: bold;
+  fill: black;
+  text-anchor: middle;
+}
