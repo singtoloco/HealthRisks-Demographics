@@ -116,7 +116,8 @@ console.log("Check app.js");
           .style("font-size", "7px") 
           .text(function(d) { return d.abbr; });
 
-        // Append axes titles
+        // Append axes labels
+        
         var ylabelGroup = chartGroup.append("text")
           .attr("transform", "rotate(-90)")
           .attr("y", 0 - margin.left + 40)
@@ -138,7 +139,12 @@ console.log("Check app.js");
         // var dummy = ylabelGroup.selectAll('text').attr('value');
 
         // console.log(dummy);
-       
+
+        ylabelGroup.on("click", function () {
+          console.log(this);
+          var value = d3.select(this).text();
+          console.log(value);
+        });
               
         
         // // Date formatter to display dates nicely
